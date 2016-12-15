@@ -1,0 +1,13 @@
+<!doctype html>
+<head>
+<title>{% block title %}Welcome{% endblock %} - Meraki Social Splash</title>
+<link rel=stylesheet type=text/css href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+<h1>Meraki Social Splash Reference App</h1>
+{% for message in get_flashed_messages() %}
+  <p class=message>{{ message }}</p>
+{% endfor %}
+{% block body %}{% endblock %}
+</body>
+</html>
