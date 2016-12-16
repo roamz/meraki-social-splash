@@ -1,9 +1,9 @@
 .PHONY: test
 
-include environment.mk
-
 clean:
 	find . -name \*.pyc -exec rm {\} \;
 
-run:
+include environment.mk
+
+run:	
 	python main.py

@@ -1,3 +1,4 @@
+import os
 from flask import Flask, redirect, url_for, session, request
 from blueprints.common import common
 from blueprints.auth import auth, oauth
@@ -6,9 +7,15 @@ app = Flask(__name__)
 app.debug = True
 app.secret_key = 'development'
 
-#TODO: load these from environment
-app.config['FACEBOOK_CONSUMER_KEY'] = '188477911223606'
-app.config['FACEBOOK_CONSUMER_SECRET'] = '621413ddea2bcc5b2e83d42fc40495de'
+# load required oauth config from environment
+app.config['FACEBOOK_CONSUMER_KEY'] = os.environ['FACEBOOK_CONSUMER_KEY']
+app.config['FACEBOOK_CONSUMER_SECRET'] = os.environ['FACEBOOK_CONSUMER_SECRET']
+app.config['TWITTER_CONSUMER_KEY'] = os.environ['TWITTER_CONSUMER_KEY']
+app.config['TWITTER_CONSUMER_SECRET'] = os.environ['TWITTER_CONSUMER_SECRET']
+app.config['INSTAGRAM_CONSUMER_KEY'] = os.environ['INSTAGRAM_CONSUMER_KEY']
+app.config['INSTAGRAM_CONSUMER_SECRET'] = os.environ['INSTAGRAM_CONSUMER_SECRET']
+app.config['WEIBO_CONSUMER_KEY'] = os.environ['WEIBO_CONSUMER_KEY']
+app.config['WEIBO_CONSUMER_SECRET'] = os.environ['WEIBO_CONSUMER_SECRET']
 
 # lazy loading flask-oauthlib with the Flask config
 oauth.init_app(app)
