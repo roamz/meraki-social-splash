@@ -1,5 +1,5 @@
 from flask_oauthlib.client import OAuth, OAuthException
-from flask import Blueprint, request, g, url_for
+from flask import Blueprint, request, g, url_for, session
 
 auth = Blueprint('auth', __name__)
 
@@ -42,7 +42,7 @@ def facebook_authorized():
 
     session['oauth_token'] = (resp['access_token'], '')
     me = facebook.get('/me')
-    return 'Logged in as id=%s name=%s redirect=%s' % \
-        (me.data['id'], me.data['name'], request.args.get('next'))
+    return 'Logged in as id=%s name=%s email=%s redirect=%s' % \
+        (me.data['id'], me.data['name'], me.data['email'], request.args.get('next'))
 
 
