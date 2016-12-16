@@ -1,0 +1,2 @@
+FACEBOOK_CONSUMER_KEY = [replace me]
+FACEBOOK_CONSUMER_SECRET = [replace me]

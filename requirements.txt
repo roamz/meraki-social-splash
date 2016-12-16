@@ -1,2 +1,2 @@
-Flask==0.11
-Flask-OAuthlib==0.9
+Flask==0.11.1
+Flask-OAuthlib==0.9.3
