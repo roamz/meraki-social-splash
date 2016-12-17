@@ -4,6 +4,5 @@ clean:
 	find . -name \*.pyc -exec rm {\} \;
 
 include environment.mk
-
-run:	
+run: 
 	python main.py
