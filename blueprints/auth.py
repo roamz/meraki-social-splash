@@ -27,7 +27,7 @@ twitter = oauth.remote_app(
 
 instagram = oauth.remote_app(
     'instagram',
-    app_key='INSTAGRAM'
+    app_key='INSTAGRAM',
     base_url='https://api.instagram.com/',
     request_token_url=None,
     access_token_method='POST',
@@ -110,7 +110,7 @@ def facebook_authorized():
 def twitter_login():
     return twitter.authorize(callback=get_callback('auth.twitter_authorised'))
 
-@app.route('/twitter/callback')
+@auth.route('/twitter/callback')
 def twitter_authorised():
     resp = twitter.authorized_response()
 
@@ -127,7 +127,7 @@ def twitter_authorised():
 def instagram_login():
     return instagram.authorize(callback=get_callback('auth.instagram_authorised'))
 
-@app.route('/instagram/callback')
+@auth.route('/instagram/callback')
 def instagram_authorised():
     resp = instagram.authorized_response()
 
@@ -144,7 +144,7 @@ def instagram_authorised():
 def weibo_login():
     return weibo.authorize(callback=get_callback('auth.weibo_authorised'))
 
-@app.route('/weibo/callback')
+@auth.route('/weibo/callback')
 def weibo_authorised():
     resp = weibo.authorized_response()
 

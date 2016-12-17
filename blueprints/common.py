@@ -8,8 +8,9 @@ common = Blueprint('common', __name__,
 
 @common.route('/')
 def index():
-    #try:
     return render_template('index.html')
-    #except TemplateNotFound:
-    #    abort(404)
 
+
+@common.route('/status/api')
+def status_api():
+    return 'OK'
