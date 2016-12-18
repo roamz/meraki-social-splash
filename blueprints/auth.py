@@ -59,6 +59,11 @@ def change_weibo_header(uri, headers, body):
 weibo.pre_request = change_weibo_header
 
 
+@oauth.invalid_response
+def invalid_require_oauth(req):
+    print 'Recieved invalid response', req.error_message
+    return req.error_message, 401
+
 
 @facebook.tokengetter
 @twitter.tokengetter
@@ -91,6 +96,9 @@ def facebook_login():
 @auth.route('/facebook/callback')
 def facebook_authorized():
     resp = facebook.authorized_response()
+
+    print 'Instagram authorized response', resp
+
     if resp is None:
         return 'Access denied: reason=%s error=%s' % (
             request.args['error_reason'],
@@ -114,10 +122,12 @@ def twitter_login():
 def twitter_authorized():
     resp = twitter.authorized_response()
 
+    print 'Twitter authorized response', resp
+
     if resp is None:
         return 'Access denied resp=%s' % resp
 
-    set_session('twitter', resp.token, resp.token_secret)
+    set_session('twitter', resp['token'], resp['token_secret'])
 
     return 'Logged in as me=%s resp=%s redirect=%s' % ('', resp, request.args.get('next'))
 
@@ -130,6 +140,8 @@ def instagram_login():
 @auth.route('/instagram/callback')
 def instagram_authorized():
     resp = instagram.authorized_response()
+
+    print 'Instagram authorized response', resp
 
     if resp is None:
         return 'Access denied resp=%s' % resp
