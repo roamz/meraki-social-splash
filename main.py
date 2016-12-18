@@ -8,14 +8,14 @@ app.debug = True
 app.secret_key = 'development'
 
 # load required oauth config from environment
-app.config['FACEBOOK_CONSUMER_KEY'] = os.environ['FACEBOOK_CONSUMER_KEY']
-app.config['FACEBOOK_CONSUMER_SECRET'] = os.environ['FACEBOOK_CONSUMER_SECRET']
-app.config['TWITTER_CONSUMER_KEY'] = os.environ['TWITTER_CONSUMER_KEY']
-app.config['TWITTER_CONSUMER_SECRET'] = os.environ['TWITTER_CONSUMER_SECRET']
-app.config['INSTAGRAM_CONSUMER_KEY'] = os.environ['INSTAGRAM_CONSUMER_KEY']
-app.config['INSTAGRAM_CONSUMER_SECRET'] = os.environ['INSTAGRAM_CONSUMER_SECRET']
-app.config['WEIBO_CONSUMER_KEY'] = os.environ['WEIBO_CONSUMER_KEY']
-app.config['WEIBO_CONSUMER_SECRET'] = os.environ['WEIBO_CONSUMER_SECRET']
+app.config['FACEBOOK_CONSUMER_KEY'] = os.environ.get('FACEBOOK_CONSUMER_KEY')
+app.config['FACEBOOK_CONSUMER_SECRET'] = os.environ.get('FACEBOOK_CONSUMER_SECRET')
+app.config['TWITTER_CONSUMER_KEY'] = os.environ.get('TWITTER_CONSUMER_KEY')
+app.config['TWITTER_CONSUMER_SECRET'] = os.environ.get('TWITTER_CONSUMER_SECRET')
+app.config['INSTAGRAM_CONSUMER_KEY'] = os.environ.get('INSTAGRAM_CONSUMER_KEY')
+app.config['INSTAGRAM_CONSUMER_SECRET'] = os.environ.get('INSTAGRAM_CONSUMER_SECRET')
+app.config['WEIBO_CONSUMER_KEY'] = os.environ.get('WEIBO_CONSUMER_KEY')
+app.config['WEIBO_CONSUMER_SECRET'] = os.environ.get('WEIBO_CONSUMER_SECRET')
 
 # lazy loading flask-oauthlib with the Flask config
 oauth.init_app(app)
