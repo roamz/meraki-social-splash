@@ -59,11 +59,6 @@ def change_weibo_header(uri, headers, body):
 weibo.pre_request = change_weibo_header
 
 
-@oauth.invalid_response
-def invalid_require_oauth(req):
-    print 'Recieved invalid response', req.error_message
-    return req.error_message, 401
-
 
 @facebook.tokengetter
 @twitter.tokengetter
