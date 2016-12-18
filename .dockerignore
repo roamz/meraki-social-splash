@@ -1,1 +1,6 @@
-environment.mk
+.git
+.gitignore
+LICENSE
+VERSION
+README.md
+Makefile
