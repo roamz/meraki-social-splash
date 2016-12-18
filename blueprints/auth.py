@@ -86,7 +86,7 @@ def get_callback(route):
 
 @auth.route('/facebook')
 def facebook_login():
-    return facebook.authorize(callback=get_callback('auth.facebook_authorised'))
+    return facebook.authorize(callback=get_callback('auth.facebook_authorized'))
 
 @auth.route('/facebook/callback')
 def facebook_authorized():
@@ -108,10 +108,10 @@ def facebook_authorized():
 
 @auth.route('/twitter')
 def twitter_login():
-    return twitter.authorize(callback=get_callback('auth.twitter_authorised'))
+    return twitter.authorize(callback=get_callback('auth.twitter_authorized'))
 
 @auth.route('/twitter/callback')
-def twitter_authorised():
+def twitter_authorized():
     resp = twitter.authorized_response()
 
     if resp is None:
@@ -125,10 +125,10 @@ def twitter_authorised():
 
 @auth.route('/instagram')
 def instagram_login():
-    return instagram.authorize(callback=get_callback('auth.instagram_authorised'))
+    return instagram.authorize(callback=get_callback('auth.instagram_authorized'))
 
 @auth.route('/instagram/callback')
-def instagram_authorised():
+def instagram_authorized():
     resp = instagram.authorized_response()
 
     if resp is None:
@@ -142,10 +142,10 @@ def instagram_authorised():
 
 @auth.route('/weibo')
 def weibo_login():
-    return weibo.authorize(callback=get_callback('auth.weibo_authorised'))
+    return weibo.authorize(callback=get_callback('auth.weibo_authorized'))
 
 @auth.route('/weibo/callback')
-def weibo_authorised():
+def weibo_authorized():
     resp = weibo.authorized_response()
 
     if resp is None:
