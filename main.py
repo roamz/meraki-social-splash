@@ -5,7 +5,7 @@ from blueprints.auth import auth, oauth
 
 app = Flask(__name__)
 app.debug = True
-app.secret_key = 'development'
+app.secret_key = '\xc2\x175R=\x9e\xed\xfaz\x89\x0c\xb1mQ;\xf2\x1e\xf7\x9bx\xee\xc0\x85\xb6'
 
 # TODO: SESSION STORAGE BACKED BY REDIS
 # Support multiple docker containers with central redis backed session storage
