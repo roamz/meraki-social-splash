@@ -1,10 +1,12 @@
 {% extends "layout.html" %}
 {% block body %}
   <h2>Overview</h2>
-  {% if g.user %}
-    <p>
-      Hello {{ g.user.screen_name }}!
-    </p>
+  {% if session.user_id %}
+    <p>Hello {{ session.name }}!</p>
+    <img src="{{ session.avatar }}">
+    <p>Signed in with {{ session.network }}</p>
+    <p><a href="{{ url_for('common.logout') }}">Logout</a></p>
+
   {% else %}
     <p>
       Sign in to continue.

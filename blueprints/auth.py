@@ -74,14 +74,13 @@ def set_tokens(network, token, token_secret):
     session['tokens'] = (token, token_secret)
 
 def set_user(user_id, username=None, name=None, avatar=None):
+    del_user()
     session['user_id'] = user_id
     if username: session['username'] = username
     if name:     session['name']     = name
     if avatar:   session['avatar']   = avatar
 
-def reset_session():
-    session.pop('network', None)
-    session.pop('tokens', None)
+def del_user():
     session.pop('user_id', None)
     session.pop('username', None)
     session.pop('name', None)
@@ -126,13 +125,13 @@ def facebook_authorized():
 
     set_tokens('facebook', resp['access_token'], '')
 
-    user = facebook.get('/me')
-    avatar = facebook.get('/%s/picture?redirect=false' % user.data['id'])
+    user = facebook.get('/me').data
+    avatar = facebook.get('/%s/picture?redirect=false' % user['id']).data
 
     # user: {'email':'benn@eichhorn.co', 'first_name':'Benn', 'gender':'male', 'id':'10153151264680849', 'last_name':'Eichhorn', 'link':'https://www.facebo...64680849/', 'locale':'en_GB', 'name':'Benn Eichhorn', 'timezone': 11, 'updated_time':'2016-12-02T01:07:31+0000', 'verified': True}
     # avatar: {u'data': {u'is_silhouette': False, u'url': u'https://scontent.x...=58E75933'}}
 
-    set_user(user.data['id'], name=user.data['name'], avatar=avatar.data['data']['url'])
+    set_user(user['id'], name=user['name'], avatar=avatar['data']['url'])
 
     return redirect(request.args.get('next'))
 
@@ -164,7 +163,7 @@ def twitter_authorized():
 
     # get user data
     # https://dev.twitter.com/rest/reference/get/account/verify_credentials#example-response
-    user = twitter.get('account/verify_credentials.json')
+    user = twitter.get('account/verify_credentials.json').data
 
     # save user in session
     set_user(resp['user_id'], username=['screen_name'], name=user['name'], avatar=user['profile_image_url_https'])
