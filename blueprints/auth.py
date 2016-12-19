@@ -89,7 +89,8 @@ def del_user():
 def get_callback(route):
     return url_for(
         route,
-        next=request.args.get('next') or request.referrer or None,
+        success_url=request.args.get('success_url') or request.referrer or url_for(INDEX),
+        failure_url=request.args.get('failure_url') or request.referrer or url_for(INDEX),
         _external=True
     )
 
@@ -105,7 +106,7 @@ def configured(remote_app):
 @auth.route('/facebook')
 def facebook_login():
     if not configured(facebook):
-        return redirect(url_for(INDEX))
+        return redirect(request.args.get('failure_url'))
     return facebook.authorize(callback=get_callback('auth.facebook_authorized'))
 
 @auth.route('/facebook/callback')
@@ -115,11 +116,11 @@ def facebook_authorized():
     except OAuthException, e:
         print 'OAuthException', e.message, e.data
         flash('Authorization error with Facebook: %s' % e.message)
-        return redirect(url_for(INDEX))
+        return redirect(request.args.get('failure_url'))
 
     if resp is None:
         flash('Authorization error with Facebook: reason=%s error=%s' % (request.args['error_reason'],request.args['error_description']))
-        return redirect(url_for(INDEX))
+        return redirect(request.args.get('failure_url'))
 
     # resp: {'access_token':'token', 'expires':'5181411'}
 
@@ -133,14 +134,14 @@ def facebook_authorized():
 
     set_user(user['id'], name=user['name'], avatar=avatar['data']['url'])
 
-    return redirect(request.args.get('next'))
+    return redirect(request.args.get('success_url'))
 
 
 
 @auth.route('/twitter')
 def twitter_login():
     if not configured(twitter):
-        return redirect(url_for(INDEX))
+        return redirect(request.args.get('failure_url'))
     return twitter.authorize(callback=get_callback('auth.twitter_authorized'))
 
 @auth.route('/twitter/callback')
@@ -150,11 +151,11 @@ def twitter_authorized():
     except OAuthException, e:
         print 'OAuthException', e.message, e.data
         flash('Authorization error with Twitter: %s' % e.message)
-        return redirect(url_for(INDEX))
+        return redirect(request.args.get('failure_url'))
 
     if resp is None:
         flash('Authorization error with Twitter: You denied the request to sign in.')
-        return redirect(url_for(INDEX))
+        return redirect(request.args.get('failure_url'))
 
     # resp: {'oauth_token_secret':'secret', 'user_id':'963683358', 'x_auth_expires':'0', 'oauth_token':'id-token', 'screen_name':'localmeasure'}
     
@@ -168,14 +169,14 @@ def twitter_authorized():
     # save user in session
     set_user(resp['user_id'], username=['screen_name'], name=user['name'], avatar=user['profile_image_url_https'])
 
-    return redirect(request.args.get('next'))
+    return redirect(request.args.get('success_url'))
 
 
 
 @auth.route('/instagram')
 def instagram_login():
     if not configured(instagram):
-        return redirect(url_for(INDEX))
+        return redirect(request.args.get('failure_url'))
     return instagram.authorize(callback=get_callback('auth.instagram_authorized'))
 
 @auth.route('/instagram/callback')
@@ -186,21 +187,21 @@ def instagram_authorized():
         # e.data = 'code': 400,'error_message':'Matching code was ...ady used.','error_type':'OAuthException'}
         print 'OAuthException', e.message, e.data
         flash('Authorization error with Instagram: %s %s' % (e.data['code'],e.data['error_message']))
-        return redirect(url_for(INDEX))
+        return redirect(request.args.get('failure_url'))
 
     # resp: 'access_token':'token','user':'username':'localmeasure','bio': u'Guest experience and personalization at scale. How well do you know your guests?  \U0001f30e Sydney I Miami I London I Singapore','website':'http://www.localmeasure.com', 'profile_picture':'https://scontent.cdninstagram.com/t....a.jpg','full_name':'Local Measure','id':'262609120'}}
 
     set_tokens('instagram', resp['access_token'], '')
     set_user(resp['user']['id'], username=resp['user']['username'], name=resp['user']['full_name'], avatar=resp['user']['profile_picture'])
 
-    return redirect(request.args.get('next'))
+    return redirect(request.args.get('success_url'))
 
 
 
 @auth.route('/weibo')
 def weibo_login():
     if not configured(weibo):
-        return redirect(url_for(INDEX))
+        return redirect(request.args.get('failure_url'))
     return weibo.authorize(callback=get_callback('auth.weibo_authorized'))
 
 @auth.route('/weibo/callback')
@@ -210,16 +211,16 @@ def weibo_authorized():
     except OAuthException, e:
         print 'OAuthException', e.message, e.data
         flash('Authorization error with Weibo: %s' % e.message)
-        return redirect(url_for(INDEX))
+        return redirect(request.args.get('failure_url'))
 
     if resp is None:
         print 'Access denied for Weibo: request.args=%s' % request.args
         flash('Access denied for Weibo')
-        return redirect(url_for(INDEX))
+        return redirect(request.args.get('failure_url'))
 
     # resp: EXAMPLE RESPONSE NEEDED
 
     #TODO: set_tokens('weibo', resp['access_token'], '')
     #TODO: set_user(...)
     flash('Authorization error with Weibo: NOT CONFIGURED')
-    return redirect(url_for(INDEX))
+    return redirect(request.args.get('failure_url'))
