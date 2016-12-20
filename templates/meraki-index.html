@@ -1,0 +1,20 @@
+{% extends "layout.html" %}
+{% block body %}
+  <h2>Overview</h2>
+    <p>
+      Sign in to continue.
+    </p>
+    <p>
+      <a href="{{ url_for('auth.facebook_login', success_url=url_for('meraki.callback')) }}">Facebook</a>
+    </p>
+    <p>
+      <a href="{{ url_for('auth.instagram_login', success_url=url_for('meraki.callback')) }}">Instagram</a>
+    </p>
+    <p>
+      <a href="{{ url_for('auth.twitter_login', success_url=url_for('meraki.callback')) }}">Twitter</a>
+    </p>
+    <p>
+      <a href="{{ url_for('auth.weibo_login', success_url=url_for('meraki.callback')) }}">Weibo</a>
+    </p>
+
+{% endblock %}

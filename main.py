@@ -2,6 +2,7 @@ import os
 from flask import Flask, redirect, url_for, session, request
 from blueprints.common import common
 from blueprints.auth import auth, oauth
+from blueprints.meraki import meraki
 
 app = Flask(__name__)
 app.debug = True
@@ -28,7 +29,7 @@ oauth.init_app(app)
 # load routes
 app.register_blueprint(common, url_prefix='')
 app.register_blueprint(auth, url_prefix='/auth')
-
+app.register_blueprint(meraki, url_prefix='/meraki')
 
 if __name__ == '__main__':
     app.run()

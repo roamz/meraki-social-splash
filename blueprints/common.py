@@ -28,16 +28,3 @@ def status_api():
 @common.route('/favicon.ico')
 def favicon():
     return redirect(url_for('static', filename='favicon.ico'))
-
-
-
-
-@common.route('/meraki')
-def meraki_login():
-    return render_template('meraki.html')
-
-
-@common.route('/meraki/success')
-def meraki_success():
-    # ELB health check endpoint - not logged in nginx or uwsgi
-    return 'OK'
