@@ -16,6 +16,7 @@ def index():
     session['node_mac'] = request.args.get('node_mac')
     session['client_ip'] = request.args.get('client_ip')
     session['client_mac'] = request.args.get('client_mac')
+    session['merchant_id'] = request.args.get('merchant_id')
     return render_template('meraki-index.html')
 
 

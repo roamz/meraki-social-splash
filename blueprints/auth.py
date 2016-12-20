@@ -167,7 +167,7 @@ def twitter_authorized():
     user = twitter.get('account/verify_credentials.json').data
 
     # save user in session
-    set_user(resp['user_id'], username=['screen_name'], name=user['name'], avatar=user['profile_image_url_https'])
+    set_user(resp['user_id'], username=user['screen_name'], name=user['name'], avatar=user['profile_image_url_https'])
 
     return redirect(request.args.get('success_url'))
 
