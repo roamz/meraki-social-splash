@@ -1,9 +1,25 @@
 {% extends "layout.html" %}
 {% block body %}
 
-    <h2>Hello {{ session.name }}!</h2>
-    <img src="{{ session.avatar }}">
-    <p>Signed in with {{ session.network }}</p>
-    <p><a href="{{ url_for('common.logout') }}">Logout</a></p>
+  <h2>Hello {{ session.name }}!</h2>
+  <img src="{{ session.avatar }}">
+  <p>Signed in with {{ session.network }}</p>
+  <p><a href="{{ url_for('common.logout') }}">Logout</a></p>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.slim.min.js"></script>
+  <script type="text/javascript">
+    $.post({
+      url: '{{ lm_api_url }}/v4/meraki',
+      contentType: 'application/json; charset=utf-8',
+      dataType: 'json',
+      data: JSON.stringify({
+        "merchant_id": "{{ session['merchant_id'] }}",
+        "mac_address": "{{ session['client_mac'] }}",
+        "social_id": "{{ session['user_id'] }}",
+        "handle": "{{ session['username'] }}",
+        "network": "{{ session['network'] }}",
+      })
+    });
+  </script>
 
 {% endblock %}
