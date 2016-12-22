@@ -14,6 +14,7 @@ app.secret_key = '\xc2\x175R=\x9e\xed\xfaz\x89\x0c\xb1mQ;\xf2\x1e\xf7\x9bx\xee\x
 
 
 # load required oauth config from environment
+app.config['LOCALMEASURE_API_URL'] = os.environ.get('LOCALMEASURE_API_URL')
 app.config['FACEBOOK_CONSUMER_KEY'] = os.environ.get('FACEBOOK_CONSUMER_KEY')
 app.config['FACEBOOK_CONSUMER_SECRET'] = os.environ.get('FACEBOOK_CONSUMER_SECRET')
 app.config['TWITTER_CONSUMER_KEY'] = os.environ.get('TWITTER_CONSUMER_KEY')
