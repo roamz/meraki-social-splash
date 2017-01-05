@@ -169,6 +169,7 @@ def twitter_login():
     if not configured(twitter):
         return redirect(get_failure_url())
 
+    # Twitter doesnt support state parameter so append states to callback uri
     callback = url_for(
         'auth.twitter_authorized',
         success_url=get_success_url(),
