@@ -17,7 +17,10 @@ def set_state():
 
 def get_state():
     state = url_decode(request.args.get('state', ''))
-    return state.get('success_url', get_success_url()), state.get('failure_url', get_failure_url())
+    return (
+        state.get('success_url', get_success_url()), 
+        state.get('failure_url', get_failure_url())
+    )
 
 facebook = oauth.remote_app(
     'facebook',
@@ -126,6 +129,7 @@ def configured(remote_app):
 def facebook_login():
     if not configured(facebook):
         return redirect(get_failure_url())
+
     callback = url_for('auth.facebook_authorized', _external=True)
     return facebook.authorize(callback=callback)
 
@@ -164,6 +168,7 @@ def facebook_authorized():
 def twitter_login():
     if not configured(twitter):
         return redirect(get_failure_url())
+
     callback = url_for(
         'auth.twitter_authorized',
         success_url=get_success_url(),
