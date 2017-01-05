@@ -22,12 +22,12 @@ def get_state():
         state.get('failure_url', get_failure_url())
     )
 
+
 facebook = oauth.remote_app(
     'facebook',
     app_key='FACEBOOK',
     base_url='https://graph.facebook.com',
     request_token_params={
-        'scope': 'email',
         'state': set_state
     },
     request_token_url=None,
