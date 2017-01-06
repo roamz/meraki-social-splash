@@ -60,7 +60,6 @@ Note: The Walled Garden is to provide access to your splash page content prior t
 ```
 git clone "https://github.com/localmeasure/meraki-social-splash"
 pip install -r requirements.txt
-
 ```   
 
 ## Environment configuration
@@ -73,7 +72,6 @@ See here for a list of keys that can be configured: https://github.com/localmeas
 // splash-exports.sh
 export INSTAGRAM_CONSUMER_KEY=ibrwi7fw34gi7wfg33
 export INSTAGRAM_CONSUMER_SECRET=ibrwi7fw34gi7wfg33ibrwi7fw34gi7wfg33
-
 ```
 
 ## Run the server using Python
@@ -82,7 +80,6 @@ This will run the server in debug mode using python
 ```
 source splash-exports.sh
 python main.py
-
 ```
 
 ## Run the server for production environments
