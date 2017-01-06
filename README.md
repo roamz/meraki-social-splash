@@ -84,10 +84,11 @@ python main.py
 
 ## Run the server for production environments
 
-To run this app in production, use Docker. The docker file included uses an Ubuntu base image configured for Nginx and uWSGI
+To run this app in production, use Docker. The docker file included uses an Ubuntu base image configured for Nginx and uWSGI and can be used on your local machine using docker.
 ```
 make dockerize
 ```
+The server will be running on http://localhost:5000/ (you will probably need to set your environment variables in the Dockerfile or some other method)
 
 # Help
 
