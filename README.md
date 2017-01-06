@@ -5,8 +5,6 @@ Provide a free Wifi internet service to your customers in exchange for gaining v
 
 This Python Flask application demonstrates how the Cisco Meraki External Captive Portal API can be used for delivering a custom Captive Portal / Splash Page using Social networks for authentication on Cisco Meraki access points.
 
-For more into about Cisco Meraki External Captive Portal (EXCAP) see here: https://meraki.cisco.com/lib/pdf/meraki_whitepaper_captive_portal.pdf
-
 ### Technology
 
 This is Python Flask app that supports signin to Facebook, Instagram, Twitter, Weibo and Wechat using the Flask-oauthlib and can be extended to support any oAuth authentication API.
@@ -16,10 +14,18 @@ Other technologies used:
 * Nginx
 * uWSGI
 
-### Credit
-Local Measure, 2017
+### Credits
 
-www.localmeasure.com
+[![alt text](https://s3.amazonaws.com/localmeasure-static/assets/logo_full.png "Local Measure, 2017")](https://www.localmeasure.com)
+
+https://www.localmeasure.com
+
+
+
+
+[![alt text](https://meraki.cisco.com/img/cisco-meraki.png "Cisco Meraki")](https://www.localmeasure.com)](https://meraki.cisco.com)
+
+https://meraki.cisco.com
 
 
 # Meraki Setup
@@ -92,12 +98,18 @@ To run this app in production, use Docker. The docker file included uses an Ubun
 make dockerize
 ```
 
-# View the example Splash Page
+# Help
+
+## View the example Splash Page
 
 You can open an example splash page at http://localhost:5000/ that doesn't require the Meraki integration to function.
 
+## How does EXCAP work
 
-# Warranty
+For more into about Cisco Meraki External Captive Portal (EXCAP) see here: https://meraki.cisco.com/lib/pdf/meraki_whitepaper_captive_portal.pdf
+
+
+## Warranty
 
 This source code is intended as a prototype and proof of concept. It comes with no warranty or guarantees. Please contact us via [Issues](https://github.com/localmeasure/meraki-social-splash/issues) for help or to contribute to this code.
 
