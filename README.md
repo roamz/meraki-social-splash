@@ -91,9 +91,9 @@ make dockerize
 
 # Help
 
-## View the example Splash Page
+## Testing and demos
 
-You can open an example splash page at http://localhost:5000/ that doesn't require the Meraki integration to function.
+To show the oauth workflow without requiring it to be connected to a Meraki access point you can open an example splash page at http://localhost:5000/ or http://path.to.your.splash.com/ and sign in through social.
 
 ## How does EXCAP work
 
