@@ -18,14 +18,9 @@ Other technologies used:
 
 [![alt text](https://s3.amazonaws.com/localmeasure-static/assets/logo_full.png "Local Measure, 2017")](https://www.localmeasure.com)
 
-https://www.localmeasure.com
 
+[![alt text](https://meraki.cisco.com/img/cisco-meraki.png "Cisco Meraki")](https://meraki.cisco.com)
 
-
-
-[![alt text](https://meraki.cisco.com/img/cisco-meraki.png "Cisco Meraki")](https://www.localmeasure.com)](https://meraki.cisco.com)
-
-https://meraki.cisco.com
 
 
 # Meraki Setup
