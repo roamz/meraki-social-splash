@@ -73,18 +73,20 @@ def set_tokens(network, token, token_secret):
     session['network'] = network
     session['tokens'] = (token, token_secret)
 
-def set_user(user_id, username=None, name=None, avatar=None):
+def set_user(user_id, username=None, name=None, avatar=None, user_model=None):
     del_user()
-    session['user_id'] = user_id
+    session['user_id']  = user_id
     if username: session['username'] = username
     if name:     session['name']     = name
     if avatar:   session['avatar']   = avatar
+    if user_model: session['user_model'] = user_model
 
 def del_user():
     session.pop('user_id', None)
     session.pop('username', None)
     session.pop('name', None)
     session.pop('avatar', None)
+    session.pop('user_model', None)
 
 def get_callback(route):
     return url_for(
@@ -132,7 +134,7 @@ def facebook_authorized():
     # user: {'email':'benn@eichhorn.co', 'first_name':'Benn', 'gender':'male', 'id':'10153151264680849', 'last_name':'Eichhorn', 'link':'https://www.facebo...64680849/', 'locale':'en_GB', 'name':'Benn Eichhorn', 'timezone': 11, 'updated_time':'2016-12-02T01:07:31+0000', 'verified': True}
     # avatar: {u'data': {u'is_silhouette': False, u'url': u'https://scontent.x...=58E75933'}}
 
-    set_user(user['id'], name=user['name'], avatar=avatar['data']['url'])
+    set_user(user['id'], name=user['name'], avatar=avatar['data']['url'], user_model=user)
 
     return redirect(request.args.get('success_url'))
 
@@ -167,7 +169,7 @@ def twitter_authorized():
     user = twitter.get('account/verify_credentials.json').data
 
     # save user in session
-    set_user(resp['user_id'], username=user['screen_name'], name=user['name'], avatar=user['profile_image_url_https'])
+    set_user(resp['user_id'], username=user['screen_name'], name=user['name'], avatar=user['profile_image_url_https'], user_model=user)
 
     return redirect(request.args.get('success_url'))
 
@@ -192,7 +194,8 @@ def instagram_authorized():
     # resp: 'access_token':'token','user':'username':'localmeasure','bio': u'Guest experience and personalization at scale. How well do you know your guests?  \U0001f30e Sydney I Miami I London I Singapore','website':'http://www.localmeasure.com', 'profile_picture':'https://scontent.cdninstagram.com/t....a.jpg','full_name':'Local Measure','id':'262609120'}}
 
     set_tokens('instagram', resp['access_token'], '')
-    set_user(resp['user']['id'], username=resp['user']['username'], name=resp['user']['full_name'], avatar=resp['user']['profile_picture'])
+    user = resp['user']
+    set_user(user['id'], username=user['username'], name=user['full_name'], avatar=user['profile_picture'], user_model=user)
 
     return redirect(request.args.get('success_url'))
 
@@ -219,6 +222,8 @@ def weibo_authorized():
         return redirect(request.args.get('failure_url'))
 
     # resp: EXAMPLE RESPONSE NEEDED
+    #user = ???
+    #set_user(user['id'], username=None, name=None, avatar=None user_model=user)
 
     #TODO: set_tokens('weibo', resp['access_token'], '')
     #TODO: set_user(...)
