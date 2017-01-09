@@ -22,12 +22,13 @@
       contentType: 'application/json; charset=utf-8',
       dataType: 'json',
       data: JSON.stringify({
-        "merchant_id": "{{ session['merchant_id'] }}",
-        "mac_address": "{{ session['client_mac'] }}",
-        "social_id": "{{ session['user_id'] }}",
-        "handle": "{{ session['username'] }}",
-        "network": "{{ session['network'] }}",
-        "user_model": "{{ session['user_model'] }}"
+        "merchant_id": "{{ session['merchant_id'] | safe}}",
+        "mac_address": "{{ session['client_mac'] | safe}}",
+        "social_id": "{{ session['user_id'] | safe}}",
+        "handle": "{{ session['username'] | safe}}",
+        "network": "{{ session['network'] | safe}}",
+        "bio": "{{ session['bio'] | safe }}",
+        "avatar_image": "{{ session['avatar'] | safe }}"
       })
     });
   </script>

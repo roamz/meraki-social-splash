@@ -1,6 +1,7 @@
 from flask_oauthlib.client import OAuth, OAuthException
 from flask import Blueprint, request, g, url_for, session, redirect, flash
 from werkzeug.urls import url_encode, url_decode
+import json
 
 INDEX = 'common.index'
 
@@ -97,13 +98,21 @@ def set_tokens(network, token, token_secret):
     session['network'] = network
     session['tokens'] = (token, token_secret)
 
-def set_user(user_id, username=None, name=None, avatar=None, user_model=None):
+def set_user(user_id, **kwargs):
     del_user()
     session['user_id']  = user_id
-    if username: session['username'] = username
-    if name:     session['name']     = name
-    if avatar:   session['avatar']   = avatar
-    if user_model: session['user_model'] = user_model
+
+    if kwargs.get('username'):
+        session['username'] = kwargs.get('username')
+
+    if kwargs.get('name'):
+        session['name'] = kwargs.get('name')
+
+    if kwargs.get('avatar'):
+        session['avatar'] = kwargs.get('avatar')
+
+    if kwargs.get('bio'):
+        session['bio'] = kwargs.get('bio')
 
 def del_user():
     session.pop('user_id', None)
@@ -111,6 +120,7 @@ def del_user():
     session.pop('name', None)
     session.pop('avatar', None)
     session.pop('user_model', None)
+    session.pop('bio', None)
 
 def get_success_url():
     return request.args.get('success_url') or request.referrer or url_for(INDEX)
@@ -155,12 +165,12 @@ def facebook_authorized():
     set_tokens('facebook', resp['access_token'], '')
 
     user = facebook.get('/me').data
-    avatar = facebook.get('/%s/picture?redirect=false' % user['id']).data
+    avatar = facebook.get('/%s/picture?redirect=false&type=large' % user['id']).data
 
     # user: {'email':'benn@eichhorn.co', 'first_name':'Benn', 'gender':'male', 'id':'10153151264680849', 'last_name':'Eichhorn', 'link':'https://www.facebo...64680849/', 'locale':'en_GB', 'name':'Benn Eichhorn', 'timezone': 11, 'updated_time':'2016-12-02T01:07:31+0000', 'verified': True}
     # avatar: {u'data': {u'is_silhouette': False, u'url': u'https://scontent.x...=58E75933'}}
 
-    set_user(user['id'], name=user['name'], avatar=avatar['data']['url'], user_model=user)
+    set_user(user['id'], username=user['name'], name=user['name'], avatar=avatar['data']['url'])
 
     return redirect(success_url)
 
@@ -203,7 +213,7 @@ def twitter_authorized():
     user = twitter.get('account/verify_credentials.json').data
 
     # save user in session
-    set_user(resp['user_id'], username=user['screen_name'], name=user['name'], avatar=user['profile_image_url_https'], user_model=user)
+    set_user(resp['user_id'], username=user['screen_name'], name=user['name'], avatar=user['profile_image_url_https'], bio=user['description'])
 
     return redirect(get_success_url())
 
@@ -233,7 +243,8 @@ def instagram_authorized():
 
     set_tokens('instagram', resp['access_token'], '')
     user = resp['user']
-    set_user(user['id'], username=user['username'], name=user['full_name'], avatar=user['profile_picture'], user_model=user)
+
+    set_user(user['id'], username=user['username'], name=user['full_name'], avatar=user['profile_picture'], bio=user['bio'])
 
     return redirect(success_url)
 
@@ -272,3 +283,4 @@ def weibo_authorized():
     #TODO: set_user(...)
     flash('Authorization error with Weibo: NOT FINISHED')
     return redirect(success_url)
+
