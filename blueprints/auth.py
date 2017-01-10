@@ -164,13 +164,19 @@ def facebook_authorized():
 
     set_tokens('facebook', resp['access_token'], '')
 
-    user = facebook.get('/me').data
-    avatar = facebook.get('/%s/picture?redirect=false&type=large' % user['id']).data
+    try:
+        user = facebook.get('/me?fields=about,email,id,name').data
+        avatar = facebook.get('/%s/picture?redirect=false&type=large' % user['id']).data
+    except Exception as e:
+        pass
 
     # user: {'email':'benn@eichhorn.co', 'first_name':'Benn', 'gender':'male', 'id':'10153151264680849', 'last_name':'Eichhorn', 'link':'https://www.facebo...64680849/', 'locale':'en_GB', 'name':'Benn Eichhorn', 'timezone': 11, 'updated_time':'2016-12-02T01:07:31+0000', 'verified': True}
     # avatar: {u'data': {u'is_silhouette': False, u'url': u'https://scontent.x...=58E75933'}}
-
-    set_user(user['id'], username=user['name'], name=user['name'], avatar=avatar['data']['url'])
+    kwargs = {}
+    kwargs['username'] = user.get('name')
+    kwargs['name'] = user.get('name')
+    kwargs['avatar'] = avatar.get('data', {}).get('url')
+    set_user(user['id'], **kwargs)
 
     return redirect(success_url)
 
@@ -274,13 +280,16 @@ def weibo_authorized():
         flash('Access denied for Weibo')
         return redirect(failure_url)
 
-    print 'Successfull authenticated with Weibo, response looks like this:', resp
-    # resp: EXAMPLE RESPONSE NEEDED
-    #user = ???
-    #set_user(user['id'], username=None, name=None, avatar=None user_model=user)
+    try:
+        # resp: {u'access_token': u'xxxx', u'remind_in': u'157679999', u'expires_in': 157679999, u'uid': u'5626844922'}
+        user = weibo.get('users/show.json?uid={}&access_token={}'.format(resp['uid'], resp['access_token'])).data
+        # user: {u'bi_followers_count': 0, u'domain': u'', u'avatar_large': u'http://tva3.sinaimg.cn/default/images/default_avatar_male_180.gif', u'verified_source': u'', u'ptype': 0, u'block_word': 0, u'star': 0, u'id': 5626844922, u'verified_reason_url': u'', u'urank': 3, u'city': u'7', u'verified': False, u'credit_score': 80, u'block_app': 0, u'follow_me': False, u'verified_reason': u'', u'followers_count': 2, u'location': u'\u6d77\u5916 \u6fb3\u5927\u5229\u4e9a', u'verified_trade': u'', u'mbtype': 0, u'verified_source_url': u'', u'profile_url': u'u/5626844922', u'province': u'400', u'avatar_hd': u'http://tva3.sinaimg.cn/default/images/default_avatar_male_180.gif', u'statuses_count': 0, u'description': u'', u'friends_count': 7, u'online_status': 0, u'mbrank': 0, u'idstr': u'5626844922', u'profile_image_url': u'http://tva3.sinaimg.cn/default/images/default_avatar_male_50.gif', u'allow_all_act_msg': False, u'allow_all_comment': True, u'geo_enabled': True, u'class': 1, u'name': u'localmeasue', u'lang': u'en-us', u'weihao': u'', u'remark': u'', u'favourites_count': 0, u'screen_name': u'localmeasue', u'url': u'', u'gender': u'm', u'created_at': u'Tue Jun 09 13:05:14 +0800 2015', u'verified_type': -1, u'following': False, u'pagefriends_count': 0, u'user_ability': 0}
+        set_user(user['id'], username=user['screen_name'], name=user['name'], avatar=user['avatar_large'], bio=user['description'])
 
-    #TODO: set_tokens('weibo', resp['access_token'], '')
-    #TODO: set_user(...)
-    flash('Authorization error with Weibo: NOT FINISHED')
+        set_tokens('weibo', resp['access_token'], '')
+    except Exception as e:
+        print 'exception getting and setting weibo user {}'.format(e)
+        return redirect(failure_url)
+
     return redirect(success_url)
 
