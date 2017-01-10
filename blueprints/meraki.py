@@ -23,13 +23,13 @@ def index(merchant_id):
 def callback():
     if not session.get('user_id'):
         print '/meraki/callback user_id not in session'
-        return redirect(url_for('meraki.index'))
+        return redirect(url_for('meraki.index', merchant_id=session.get('merchant_id')))
 
     base_grant_url = session.get('base_grant_url')
     if not base_grant_url:
         print '/meraki/callback base_grant_url not in session'
         flash('Failed to redirect to Meraki access point')
-        return redirect(url_for('meraki.index'))
+        return redirect(url_for('meraki.index', merchant_id=session.get('merchant_id')))
 
     callback = base_grant_url + "?continue_url=" + url_for('meraki.success', _external=True)
     return redirect(callback)
