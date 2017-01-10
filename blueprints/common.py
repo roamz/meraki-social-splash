@@ -28,3 +28,12 @@ def status_api():
 @common.route('/favicon.ico')
 def favicon():
     return redirect(url_for('static', filename='favicon.ico'))
+
+
+@common.route('/terms')
+def terms():
+    return render_template('terms.html')
+  
+@common.route('/privacy-policy')
+def privacy():
+    return render_template('privacy.html')
