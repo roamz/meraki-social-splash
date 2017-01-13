@@ -299,7 +299,11 @@ def weibo_login():
     if not configured(weibo):
         return redirect(get_failure_url())
 
-    callback = url_for('auth.weibo_authorized', _external=True)
+    callback = url_for('auth.weibo_authorized',
+        success_url=get_success_url(),
+        failure_url=get_failure_url(),
+        _external=True
+    )
     return weibo.authorize(callback=callback)
 
 @auth.route('/weibo/callback')
