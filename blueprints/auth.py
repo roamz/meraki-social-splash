@@ -299,17 +299,14 @@ def weibo_login():
     if not configured(weibo):
         return redirect(get_failure_url())
 
-    callback = url_for('auth.weibo_authorized',
-        success_url=get_success_url(),
-        failure_url=get_failure_url(),
-        _external=True
-    )
+    callback = url_for('auth.weibo_authorized', _external=True)
     return weibo.authorize(callback=callback)
 
 @auth.route('/weibo/callback')
 def weibo_authorized():
     success_url, failure_url = get_state()
 
+    print 'weibo callback: {} {}'.format(success_url, failure_url)
     resp = None
     try:
         resp = weibo.authorized_response()
@@ -326,6 +323,7 @@ def weibo_authorized():
         flash('Authorization error with Weibo: reason=%s error=%s' % (request.args['error_reason'], request.args['error_description']))
         return redirect(failure_url)
 
+    print 'resp = {}'.format(resp)
     try:
         set_tokens('weibo', resp['access_token'], '')
     except Exception as e:
