@@ -304,8 +304,8 @@ def weibo_login():
 
 @auth.route('/weibo/callback')
 def weibo_authorized():
-    success_url = url_for(INDEX)
-    failure_url = url_for(INDEX)
+    success_url = '/'
+    failure_url = '/'
 
     resp = None
     try:
@@ -323,6 +323,7 @@ def weibo_authorized():
         flash('Authorization error with Weibo: reason=%s error=%s' % (request.args['error_reason'], request.args['error_description']))
         return redirect(failure_url)
 
+    print 'resp = {}'.format(resp)
     try:
         set_tokens('weibo', resp['access_token'], '')
     except Exception as e:
