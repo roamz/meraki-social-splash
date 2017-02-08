@@ -300,12 +300,12 @@ def weibo_login():
         return redirect(get_failure_url())
 
     callback = url_for('auth.weibo_authorized', _external=True)
+    callback = callback.replace('http://localhost:4000', 'https://wifi.getlocalmeasure.com')
     return weibo.authorize(callback=callback)
 
 @auth.route('/weibo/callback')
 def weibo_authorized():
-    success_url = '/'
-    failure_url = '/'
+    success_url, failure_url = get_state()
 
     resp = None
     try:
