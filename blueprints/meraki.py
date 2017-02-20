@@ -9,8 +9,10 @@ meraki = Blueprint('meraki', __name__,
 )
 
 @meraki.route('/<merchant_id>')
-def index(merchant_id):
+@meraki.route('/<merchant_id>/<place_name>')
+def index(merchant_id, place_name=None):
     session['merchant_id'] = merchant_id
+    session['asset_path'] = merchant_id + ('/' + place_name if place_name else '')
     session['base_grant_url'] = request.args.get('base_grant_url')
     session['user_continue_url'] = request.args.get('user_continue_url')
     session['node_mac'] = request.args.get('node_mac')
