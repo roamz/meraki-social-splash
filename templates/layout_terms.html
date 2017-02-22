@@ -6,6 +6,14 @@
 </head>
 <body>
   <main id="main" class="site-main" role="main">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+  <script type="text/javascript">
+    $(document).ready(function() {
+      $(".section.hide").first().load("https://splash.getlocalmeasure.com/assets/{{ session.asset_path }}/terms.html", function() {
+        $(this).show();
+      });
+    });
+  </script>
 {% for message in get_flashed_messages() %}
   <p class=message>{{ message }}</p>
 {% endfor %}

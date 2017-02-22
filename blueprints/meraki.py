@@ -1,6 +1,7 @@
 import os
 from flask import Blueprint, render_template, abort, url_for, redirect, session, request, flash, current_app
 from jinja2 import TemplateNotFound
+import requests
 
 
 meraki = Blueprint('meraki', __name__,
@@ -11,8 +12,12 @@ meraki = Blueprint('meraki', __name__,
 @meraki.route('/<merchant_id>')
 @meraki.route('/<merchant_id>/<place_name>')
 def index(merchant_id, place_name=None):
+    asset_path = merchant_id + ('/' + place_name if place_name else '')
+    if requests.head('https://splash.getlocalmeasure.com/assets/' + asset_path + '/header.jpg').status_code != 200:
+        asset_path = '51133f30f9bfa548c7c6540f'
+
     session['merchant_id'] = merchant_id
-    session['asset_path'] = merchant_id + ('/' + place_name if place_name else '')
+    session['asset_path'] = asset_path
     session['base_grant_url'] = request.args.get('base_grant_url')
     session['user_continue_url'] = request.args.get('user_continue_url')
     session['node_mac'] = request.args.get('node_mac')
