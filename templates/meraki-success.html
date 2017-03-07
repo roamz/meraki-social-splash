@@ -28,7 +28,11 @@
         "handle": "{{ session['username'] | safe}}",
         "network": "{{ session['network'] | safe}}",
         "bio": "{{ session['bio'] | safe }}",
-        "avatar_image": "{{ session['avatar'] | safe }}"
+        "avatar_image": "{{ session['avatar'] | safe }}",
+        "email": "{{ session['email'] | safe }}",
+        "gender": "{{ session['gender'] | safe }}",
+        "followers_count": "{{ session['followers_count'] | safe }}",
+        "user_agent": navigator.userAgent
       })
     });
   </script>

@@ -1,7 +1,8 @@
 from flask_oauthlib.client import OAuth, OAuthException
-from flask import Blueprint, request, g, url_for, session, redirect, flash
+from flask import Blueprint, request, g, url_for, session, redirect, flash, current_app
 from werkzeug.urls import url_encode, url_decode
-import json
+from hashlib import sha256
+import json, hmac
 
 INDEX = 'common.index'
 
@@ -19,16 +20,22 @@ def set_state():
 def get_state():
     state = url_decode(request.args.get('state', ''))
     return (
-        state.get('success_url', get_success_url()), 
+        state.get('success_url', get_success_url()),
         state.get('failure_url', get_failure_url())
     )
 
+def instagram_sig(endpoint, params, secret):
+    sig = endpoint
+    for key in sorted(params.keys()):
+        sig += '|%s=%s' % (key, params[key])
+    return hmac.new(secret, sig, sha256).hexdigest()
 
 facebook = oauth.remote_app(
     'facebook',
     app_key='FACEBOOK',
     base_url='https://graph.facebook.com',
     request_token_params={
+        'scope': 'email,user_friends',
         'state': set_state
     },
     request_token_url=None,
@@ -49,7 +56,7 @@ twitter = oauth.remote_app(
 instagram = oauth.remote_app(
     'instagram',
     app_key='INSTAGRAM',
-    base_url='https://api.instagram.com/',
+    base_url='https://api.instagram.com/v1/',
     request_token_params={
         'state': set_state
     },
@@ -171,13 +178,17 @@ def facebook_authorized():
 
     user = {}
     try:
-        user = facebook.get('/me?fields=about,email,id,name').data
+        user = facebook.get('/me?fields=email,id,name,gender').data
         avatar = facebook.get('/%s/picture?redirect=false&type=large' % user['id']).data
+        friends = facebook.get('/me/friends').data
 
         kwargs = {}
         kwargs['username'] = user.get('name')
         kwargs['name'] = user.get('name')
         kwargs['avatar'] = avatar.get('data', {}).get('url')
+        kwargs['email'] = user.get('email')
+        kwargs['gender'] = user.get('gender')
+        kwargs['followers_count'] = friends.get('summary', {}).get('total_count')
         set_user(user['id'], **kwargs)
     except Exception as e:
         print 'exception getting and setting facebook user {}'.format(e)
@@ -232,6 +243,7 @@ def twitter_authorized():
         kwargs['name'] = user.get('name')
         kwargs['avatar'] = user.get('profile_image_url_https')
         kwargs['bio'] = user.get('description')
+        kwargs['followers_count'] = user.get('friends_count')
         set_user(resp['user_id'], **kwargs)
     except Exception as e:
         print 'exception getting and setting Twitter user {}'.format(e)
@@ -279,12 +291,14 @@ def instagram_authorized():
         return redirect(failure_url)
 
     try:
-        user = resp['user']
+        sig = instagram_sig('/users/self', {'access_token': resp['access_token']}, current_app.config['INSTAGRAM_CONSUMER_SECRET'])
+        user = instagram.get('users/self?access_token={}&sig={}'.format(resp['access_token'], sig)).data.get('data', resp['user'])
         kwargs = {}
         kwargs['username'] = user.get('username')
         kwargs['name'] = user.get('full_name')
         kwargs['avatar'] = user.get('profile_picture')
         kwargs['bio'] = user.get('bio')
+        kwargs['followers_count'] = user.get('counts', {}).get('followed_by')
         set_user(user['id'], **kwargs)
     except Exception as e:
         print 'exception getting and setting instagram user {}'.format(e)
@@ -338,6 +352,8 @@ def weibo_authorized():
         kwargs['name'] = user.get('name')
         kwargs['avatar'] = user.get('avatar_large')
         kwargs['bio'] = user.get('description')
+        kwargs['gender'] = user.get('gender')
+        kwargs['followers_count'] = user.get('followers_count')
         set_user(user['id'], **kwargs)
     except Exception as e:
         print 'exception getting and setting weibo user {}'.format(e)
