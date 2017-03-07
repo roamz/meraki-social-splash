@@ -58,7 +58,6 @@ instagram = oauth.remote_app(
     app_key='INSTAGRAM',
     base_url='https://api.instagram.com/v1/',
     request_token_params={
-        'scope': 'follower_list',
         'state': set_state
     },
     request_token_url=None,
