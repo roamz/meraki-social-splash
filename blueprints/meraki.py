@@ -13,9 +13,6 @@ meraki = Blueprint('meraki', __name__,
 @meraki.route('/<merchant_id>/<place_name>')
 def index(merchant_id, place_name=None):
     asset_path = merchant_id + ('/' + place_name if place_name else '')
-    if requests.head('https://splash.getlocalmeasure.com/assets/' + asset_path + '/header.jpg').status_code != 200:
-        asset_path = '51133f30f9bfa548c7c6540f'
-
     session['merchant_id'] = merchant_id
     session['asset_path'] = asset_path
     session['base_grant_url'] = request.args.get('base_grant_url')
