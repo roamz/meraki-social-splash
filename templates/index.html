@@ -3,19 +3,28 @@
 <section class="section">
   <div class="content--narrow white">
     {% if session.user_id %}
-    <h2>Welcome!</h2>
-    <div class="block">
-      <div class="block-header">
-        <div class="block-header-icon--large">
-          <img class="avatar" src="{{ session.avatar }}" alt="">
+    <div class="columns large-6">
+      <h2>Welcome!</h2>
+      <div class="block">
+        <div class="block-header">
+          <div class="block-header-icon--large">
+            <img class="avatar" src="{{ session.avatar }}" alt="">
+          </div>
+          <h3 class="block-heading">{{ session.name }}
+            <span class="subhead">{{ session.username }}</span>
+          </h3>
         </div>
-        <h3 class="block-heading">{{ session.name }}
-          <span class="subhead">{{ session.username }}</span>
-        </h3>
-      </div>  
-      <p><a class="button--light" href="{{ url_for('common.logout') }}">Logout</a></p>
+        <p><a class="button--light" href="{{ url_for('common.logout') }}">Logout</a></p>
+      </div>
     </div>
-    
+    <div class="columns large-6">
+      <h2>Bio</h2>
+      <h3>Love long walks on the beach. Love Australia</h3>
+      <p><i class="fa fa-briefcase" aria-hidden="true"></i> Works at Local Measure</p>
+      <p><i class="fa fa-home" aria-hidden="true"></i> Lives in Bondi</p>
+      <p><i class="fa fa-map-marker" aria-hidden="true"></i> From San Francisco</p>
+    </div>
+
     {% else %}
     <div>
       <h2 class="border-orange">Login with Social Media</h2>
